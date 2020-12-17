@@ -4,7 +4,6 @@ import { addQuestion } from '../firebase/db/questionDb';
 
 interface CreateQuestionFormProps {
 	quizId: string;
-	// refreshPage?: () => void;
 }
 
 const CreateQuestionForm: React.FC<CreateQuestionFormProps> = ({ quizId }) => {
@@ -23,7 +22,6 @@ const CreateQuestionForm: React.FC<CreateQuestionFormProps> = ({ quizId }) => {
 					await addQuestion(quizId, values.question);
 					setSubmitting(false);
 					resetForm({ values: { question: '' } });
-					// refreshPage();
 				}}
 			>
 				{({

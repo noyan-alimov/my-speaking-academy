@@ -8,20 +8,22 @@ interface HomeProps {
 	history: any;
 }
 
-const Home: React.FC<HomeProps> = ({ user, history }) => {
+const Home: React.FC<HomeProps> = ({ history, user }) => {
 	const [quizName, setQuizName] = React.useState<string>('');
 	const [quizzes, setQuizzes] = React.useState<any[]>([]);
 
-	const queryQuizzes = async () => {
-		if (user && user.email) {
-			const quizzesData = await getQuizzes(user.email);
+	const queryQuizzes = async (userEmail: any): Promise<void> => {
+		const quizzesData = await getQuizzes(userEmail);
+		if (quizzesData) {
 			setQuizzes(quizzesData);
 		}
 	};
 
 	React.useEffect(() => {
-		queryQuizzes();
-	}, [user, queryQuizzes]);
+		if (user) {
+			queryQuizzes(user.email);
+		}
+	}, [user, setQuizName]);
 
 	const createQuizSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -33,8 +35,8 @@ const Home: React.FC<HomeProps> = ({ user, history }) => {
 
 		if (user) {
 			if (user.email) {
-				const id: string = await createQuiz(user.email, quizName);
-				history.push(`/quiz/${id}`);
+				const id: string | void = await createQuiz(user.email, quizName);
+				setQuizName('');
 			}
 		} else {
 			history.push('/login');

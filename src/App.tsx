@@ -4,19 +4,21 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import firebase, { auth } from './firebase/initialize';
 import QuizPage from './pages/QuizPage';
+import { auth } from './firebase/initialize';
 
 const App = () => {
-	const [user, setUser] = React.useState<firebase.User | null>(null);
+	const [user, setUser] = React.useState<any>(null);
 
-	auth.onAuthStateChanged(user => {
-		if (user) {
-			setUser(user);
-		} else {
-			setUser(null);
-		}
-	});
+	React.useEffect(() => {
+		auth.onAuthStateChanged(user => {
+			if (user) {
+				setUser(user);
+			} else {
+				setUser(null);
+			}
+		});
+	}, []);
 
 	return (
 		<>
@@ -28,7 +30,11 @@ const App = () => {
 					render={props => <Home user={user} {...props} />}
 				/>
 				<Route exact path='/login' component={Login} />
-				<Route exact path='/quiz/:id/:name' component={QuizPage} />
+				<Route
+					exact
+					path='/quiz/:id/:name'
+					render={props => <QuizPage user={user} {...props} />}
+				/>
 				<Footer />
 			</BrowserRouter>
 		</>

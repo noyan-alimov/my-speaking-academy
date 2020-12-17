@@ -4,7 +4,7 @@ import { logoutUser } from '../firebase/auth';
 import firebase from '../firebase/initialize';
 
 interface HeaderProps {
-	user: firebase.User | null;
+	user: firebase.User;
 }
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
