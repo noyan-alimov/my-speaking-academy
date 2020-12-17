@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import firebase, { auth } from './firebase/initialize';
+import QuizPage from './pages/QuizPage';
 
 const App = () => {
 	const [user, setUser] = React.useState<firebase.User | null>(null);
@@ -27,6 +28,7 @@ const App = () => {
 					render={props => <Home user={user} {...props} />}
 				/>
 				<Route exact path='/login' component={Login} />
+				<Route exact path='/quiz/:id/:name' component={QuizPage} />
 				<Footer />
 			</BrowserRouter>
 		</>

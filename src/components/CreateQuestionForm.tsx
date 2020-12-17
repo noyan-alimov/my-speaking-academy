@@ -1,14 +1,15 @@
 import { Formik } from 'formik';
 import React from 'react';
-import { addQuestion } from '../firebase/db';
+import { addQuestion } from '../firebase/db/questionDb';
 
 interface CreateQuestionFormProps {
 	quizId: string;
+	// refreshPage?: () => void;
 }
 
 const CreateQuestionForm: React.FC<CreateQuestionFormProps> = ({ quizId }) => {
 	return (
-		<div className='w-100'>
+		<section className='w-100 mb4'>
 			<Formik
 				initialValues={{ question: '' }}
 				validate={values => {
@@ -22,6 +23,7 @@ const CreateQuestionForm: React.FC<CreateQuestionFormProps> = ({ quizId }) => {
 					await addQuestion(quizId, values.question);
 					setSubmitting(false);
 					resetForm({ values: { question: '' } });
+					// refreshPage();
 				}}
 			>
 				{({
@@ -61,7 +63,7 @@ const CreateQuestionForm: React.FC<CreateQuestionFormProps> = ({ quizId }) => {
 					</form>
 				)}
 			</Formik>
-		</div>
+		</section>
 	);
 };
 
