@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import QuizPage from './pages/QuizPage';
 import { auth } from './firebase/initialize';
+import QuestionPage from './pages/QuestionPage';
 
 const App = () => {
 	const [user, setUser] = React.useState<any>(null);
@@ -35,7 +36,12 @@ const App = () => {
 					path='/quiz/:id/:name'
 					render={props => <QuizPage user={user} {...props} />}
 				/>
-				<Footer />
+				<Route
+					exact
+					path='/quiz/:id/:name/question/:questionId'
+					render={props => <QuestionPage user={user} {...props} />}
+				/>
+				{/* <Footer /> */}
 			</BrowserRouter>
 		</>
 	);

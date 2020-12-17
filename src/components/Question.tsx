@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { deleteQuestion } from '../firebase/db/questionDb';
 
 type QuestionType = {
@@ -9,9 +10,10 @@ type QuestionType = {
 interface QuestionProps {
 	question: QuestionType;
 	quizId: string;
+	quizName: string;
 }
 
-const Question: React.FC<QuestionProps> = ({ question, quizId }) => {
+const Question: React.FC<QuestionProps> = ({ question, quizId, quizName }) => {
 	const removeQuestion = async () => {
 		await deleteQuestion(quizId, question.id);
 	};
@@ -21,9 +23,11 @@ const Question: React.FC<QuestionProps> = ({ question, quizId }) => {
 			<div className='bg-washed-yellow pa2 br2'>
 				<p>{question.question}</p>
 				<div className='flex justify-between'>
-					{/* <button className='bn br2 pa2 bg-dark-blue near-white dim pointer'>
-						EDIT
-					</button> */}
+					<Link to={`/quiz/${quizId}/${quizName}/question/${question.id}`}>
+						<button className='bn br2 pa2 bg-dark-blue near-white dim pointer'>
+							ANSWER
+						</button>
+					</Link>
 					<button
 						className='bn br2 pa2 bg-red near-white dim pointer'
 						onClick={removeQuestion}

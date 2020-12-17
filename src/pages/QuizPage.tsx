@@ -35,7 +35,12 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 			<h2 className='db w-100 tc dark-blue'>{quizName}</h2>
 			<section className='w-100 flex flex-wrap'>
 				{questions.map(question => (
-					<Question key={question.id} question={question} quizId={quizId} />
+					<Question
+						key={question.id}
+						question={question}
+						quizId={quizId}
+						quizName={quizName}
+					/>
 				))}
 			</section>
 			<CreateQuestionForm quizId={quizId} />

@@ -54,3 +54,65 @@ export const deleteQuestion = async (
 		console.error(error);
 	}
 };
+
+export const getQuestion = async (
+	quizId: string,
+	questionId: string
+): Promise<{} | void> => {
+	try {
+		const docRef = await db
+			.collection('quizzes')
+			.doc(quizId)
+			.collection('questions')
+			.doc(questionId)
+			.get();
+
+		return {
+			id: docRef.id,
+			...docRef.data(),
+		};
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const answerQuestion = async (
+	quizId: string,
+	questionId: string,
+	answer: string
+): Promise<void> => {
+	try {
+		const docRef = db
+			.collection('quizzes')
+			.doc(quizId)
+			.collection('questions')
+			.doc(questionId);
+
+		await docRef.update({ answer });
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const checkAnswer = async (
+	quizId: string,
+	questionId: string,
+	isCorrectAnswer: boolean,
+	commentsOnAnswer: string = ''
+): Promise<void> => {
+	try {
+		const docRef = db
+			.collection('quizzes')
+			.doc(quizId)
+			.collection('questions')
+			.doc(questionId);
+
+		await docRef.update({
+			isCorrectAnswer,
+			commentsOnAnswer,
+			checkedAnswer: true,
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
