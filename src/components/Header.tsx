@@ -1,18 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { logoutUser } from '../firebase/auth';
+import firebase from '../firebase/initialize';
 
-interface HeaderProps {}
+interface HeaderProps {
+	user: firebase.User | null;
+}
 
-const Header: React.FC<HeaderProps> = ({}) => {
+const Header: React.FC<HeaderProps> = ({ user }) => {
+	const logout = async () => {
+		await logoutUser();
+	};
+
 	return (
 		<header className='h3 pt3 bg-dark-blue'>
 			<nav className='flex justify-around'>
 				<Link to='/' className='white no-underline f3'>
 					Home
 				</Link>
-				<Link to='/login' className='white no-underline f3'>
-					Login
-				</Link>
+				{!user ? (
+					<Link to='/login' className='white no-underline f3'>
+						Login
+					</Link>
+				) : (
+					<a href='#' className='white no-underline f3' onClick={logout}>
+						Logout
+					</a>
+				)}
 			</nav>
 		</header>
 	);

@@ -2,9 +2,11 @@ import React from 'react';
 import { Formik } from 'formik';
 import { loginUser } from '../firebase/auth';
 
-interface LoginFormProps {}
+interface LoginFormProps {
+	redirectToHomePage: () => void;
+}
 
-const LoginForm: React.FC<LoginFormProps> = ({}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ redirectToHomePage }) => {
 	return (
 		<div className='flex flex-wrap'>
 			<h1 className='db w-100 tc'>Login</h1>
@@ -34,6 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({}) => {
 
 					setSubmitting(false);
 					resetForm({ values: { email: '', password: '' } });
+					redirectToHomePage();
 				}}
 			>
 				{({

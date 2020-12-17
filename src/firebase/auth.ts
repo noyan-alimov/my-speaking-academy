@@ -30,3 +30,13 @@ export const loginUser = async (
 		return error;
 	}
 };
+
+export const logoutUser = async (): Promise<ErrorResponse | undefined> => {
+	try {
+		await auth.signOut();
+		return undefined;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+};
