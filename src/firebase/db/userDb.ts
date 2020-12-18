@@ -4,8 +4,7 @@ import { UserRole } from '../../types/UserRole';
 export const addUser = async (user: any) => {
 	try {
 		await db.collection('users').doc(user.email).set({
-			email: user.email,
-			displayName: user.displayName,
+			email: user.user.email,
 			createdAt: new Date(),
 			role: 'student',
 		});
@@ -37,7 +36,7 @@ export const getStudents = async (
 
 		const snapshot = await db
 			.collection('users')
-			.where('email', 'array-contains', studentEmail)
+			.where('email', '==', studentEmail)
 			.get();
 		snapshot.forEach(doc => {
 			students.push({

@@ -1,4 +1,4 @@
-import { db } from '../initialize';
+import firebase, { db } from '../initialize';
 
 export const createQuiz = async (
 	creatorEmail: string,
@@ -55,14 +55,37 @@ export const deleteQuiz = async (id: string): Promise<void> => {
 	}
 };
 
-export const assignQuizToStudents = async (
+export const assignQuizToStudent = async (
 	id: string,
-	studentsEmails: string[]
+	studentEmail: string
 ): Promise<void> => {
 	try {
-		await db.collection('quizzes').doc(id).update({
-			assignedToStudents: studentsEmails,
-		});
+		await db
+			.collection('quizzes')
+			.doc(id)
+			.update({
+				assignedToStudents: firebase.firestore.FieldValue.arrayUnion(
+					studentEmail
+				),
+			});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const unAssignQuizToStudent = async (
+	id: string,
+	studentEmail: string
+): Promise<void> => {
+	try {
+		await db
+			.collection('quizzes')
+			.doc(id)
+			.update({
+				assignedToStudents: firebase.firestore.FieldValue.arrayRemove(
+					studentEmail
+				),
+			});
 	} catch (error) {
 		console.error(error);
 	}

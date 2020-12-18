@@ -45,8 +45,13 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 				))}
 			</section>
 			<CreateQuestionForm quizId={quizId} queryQuestions={queryQuestions} />
-			<Link to={`/quiz/${quizId}/${quizName}/assign-to-students`}>
-				<button>ASSIGN TO STUDENTS</button>
+			<Link
+				to={`/quiz/${quizId}/${quizName}/assign-to-students`}
+				className='w-100'
+			>
+				<button className='bn pa3 f3 dim b bg-dark-blue near-white br2 pointer'>
+					ASSIGN TO STUDENTS
+				</button>
 			</Link>
 		</main>
 	);
