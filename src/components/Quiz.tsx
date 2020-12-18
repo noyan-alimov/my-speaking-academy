@@ -5,8 +5,8 @@ import { deleteQuiz } from '../firebase/db/quizDb';
 interface QuizProps {
 	id: string;
 	name: string;
-	creatorEmail: string;
-	queryQuizzes: (creatorEmail: string) => void;
+	creatorEmail?: string;
+	queryQuizzes?: (creatorEmail: string) => void;
 }
 
 const Quiz: React.FC<QuizProps> = ({
@@ -17,7 +17,9 @@ const Quiz: React.FC<QuizProps> = ({
 }) => {
 	const removeQuiz = async () => {
 		await deleteQuiz(id);
-		queryQuizzes(creatorEmail);
+		if (queryQuizzes && creatorEmail) {
+			queryQuizzes(creatorEmail);
+		}
 	};
 
 	return (

@@ -12,7 +12,9 @@ export const registerUser = async (
 ): Promise<ErrorResponse | undefined> => {
 	try {
 		const user = await auth.createUserWithEmailAndPassword(email, password);
-		await addUser(user);
+		if (user && user.user && user.user.email) {
+			await addUser(user.user.email);
+		}
 		return undefined;
 	} catch (error) {
 		console.error(error);

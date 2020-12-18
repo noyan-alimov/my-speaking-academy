@@ -1,10 +1,10 @@
 import { db } from '../initialize';
 import { UserRole } from '../../types/UserRole';
 
-export const addUser = async (user: any) => {
+export const addUser = async (email: string) => {
 	try {
-		await db.collection('users').doc(user.email).set({
-			email: user.user.email,
+		await db.collection('users').doc(email).set({
+			email,
 			createdAt: new Date(),
 			role: 'student',
 		});
@@ -13,9 +13,9 @@ export const addUser = async (user: any) => {
 	}
 };
 
-export const getUserRole = async (user: any): Promise<UserRole | void> => {
+export const getUserRole = async (email: string): Promise<UserRole | void> => {
 	try {
-		const userRef = await db.collection('users').doc(user.email).get();
+		const userRef = await db.collection('users').doc(email).get();
 		const userDoc = userRef.data();
 
 		if (userDoc!.role === 'teacher') {

@@ -90,3 +90,27 @@ export const unAssignQuizToStudent = async (
 		console.error(error);
 	}
 };
+
+export const getQuizzesForAssignedUser = async (
+	studentEmail: string
+): Promise<any[] | void> => {
+	try {
+		let quizzes: any[] = [];
+
+		const snapshot = await db
+			.collection('quizzes')
+			.where('assignedToStudents', 'array-contains', studentEmail)
+			.get();
+
+		snapshot.forEach(doc => {
+			quizzes.push({
+				id: doc.id,
+				...doc.data(),
+			});
+		});
+
+		return quizzes;
+	} catch (error) {
+		console.error(error);
+	}
+};
