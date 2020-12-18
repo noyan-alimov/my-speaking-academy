@@ -11,11 +11,18 @@ interface QuestionProps {
 	question: QuestionType;
 	quizId: string;
 	quizName: string;
+	queryQuestions: () => void;
 }
 
-const Question: React.FC<QuestionProps> = ({ question, quizId, quizName }) => {
+const Question: React.FC<QuestionProps> = ({
+	question,
+	quizId,
+	quizName,
+	queryQuestions,
+}) => {
 	const removeQuestion = async () => {
 		await deleteQuestion(quizId, question.id);
+		queryQuestions();
 	};
 
 	return (

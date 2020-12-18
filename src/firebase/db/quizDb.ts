@@ -6,7 +6,7 @@ export const createQuiz = async (
 ): Promise<string | void> => {
 	try {
 		const quiz = db.collection('quizzes').doc();
-		quiz.set({ creatorEmail, name });
+		quiz.set({ creatorEmail, name, createdAt: new Date() });
 		return quiz.id;
 	} catch (error) {
 		console.error(error);
@@ -22,6 +22,7 @@ export const getQuizzes = async (
 		const snapshot = await db
 			.collection('quizzes')
 			.where('creatorEmail', '==', creatorEmail)
+			.orderBy('createdAt', 'desc')
 			.get();
 
 		snapshot.forEach(doc => {
@@ -49,6 +50,19 @@ export const getQuizzes = async (
 export const deleteQuiz = async (id: string): Promise<void> => {
 	try {
 		await db.collection('quizzes').doc(id).delete();
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const assignQuizToStudents = async (
+	id: string,
+	studentsEmails: string[]
+): Promise<void> => {
+	try {
+		await db.collection('quizzes').doc(id).update({
+			assignedToStudents: studentsEmails,
+		});
 	} catch (error) {
 		console.error(error);
 	}

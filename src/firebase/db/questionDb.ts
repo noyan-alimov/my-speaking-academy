@@ -10,7 +10,7 @@ export const addQuestion = async (
 			.doc(`${quizId}`)
 			.collection('questions')
 			.doc();
-		questionDoc.set({ question });
+		questionDoc.set({ question, createdAt: new Date() });
 		return questionDoc.id;
 	} catch (error) {
 		console.error(error);
@@ -25,6 +25,7 @@ export const getQuestions = async (quizId: string): Promise<any[] | void> => {
 			.collection('quizzes')
 			.doc(quizId)
 			.collection('questions')
+			.orderBy('createdAt', 'desc')
 			.get();
 
 		snapshot.forEach(doc => {

@@ -6,11 +6,18 @@ interface QuizProps {
 	id: string;
 	name: string;
 	creatorEmail: string;
+	queryQuizzes: (creatorEmail: string) => void;
 }
 
-const Quiz: React.FC<QuizProps> = ({ id, name, creatorEmail }) => {
+const Quiz: React.FC<QuizProps> = ({
+	id,
+	name,
+	creatorEmail,
+	queryQuizzes,
+}) => {
 	const removeQuiz = async () => {
 		await deleteQuiz(id);
+		queryQuizzes(creatorEmail);
 	};
 
 	return (

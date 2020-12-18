@@ -42,15 +42,28 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ user, match }) => {
 						<p className='f3'>Answer: {question.answer}</p>
 					</div>
 					{question.checkedAnswer ? (
-						<div>
-							{question.isCorrectAnswer} {question.commentsOnAnswer}
+						<div className='w-100 flex flex-column justify-center items-center'>
+							{question.isCorrectAnswer ? (
+								<p className='f3 dark-blue'>Correct</p>
+							) : (
+								<p className='f3 dark-blue'>Not Correct</p>
+							)}{' '}
+							<p className='f3 dark-blue'>{question.commentsOnAnswer}</p>
 						</div>
 					) : (
-						<CheckAnswerForm quizId={quizId} questionId={questionId} />
+						<CheckAnswerForm
+							quizId={quizId}
+							questionId={questionId}
+							queryQuestion={queryQuestion}
+						/>
 					)}
 				</>
 			) : (
-				<AnswerForm quizId={quizId} questionId={questionId} />
+				<AnswerForm
+					quizId={quizId}
+					questionId={questionId}
+					queryQuestion={queryQuestion}
+				/>
 			)}
 		</main>
 	);

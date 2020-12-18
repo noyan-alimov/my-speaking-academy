@@ -1,4 +1,5 @@
 import { auth } from './initialize';
+import { addUser } from './db/userDb';
 
 type ErrorResponse = {
 	code: string;
@@ -10,7 +11,8 @@ export const registerUser = async (
 	password: string
 ): Promise<ErrorResponse | undefined> => {
 	try {
-		await auth.createUserWithEmailAndPassword(email, password);
+		const user = await auth.createUserWithEmailAndPassword(email, password);
+		await addUser(user);
 		return undefined;
 	} catch (error) {
 		console.error(error);

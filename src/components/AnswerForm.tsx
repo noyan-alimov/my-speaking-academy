@@ -5,9 +5,14 @@ import { answerQuestion } from '../firebase/db/questionDb';
 interface AnswerFormProps {
 	quizId: string;
 	questionId: string;
+	queryQuestion: () => void;
 }
 
-const AnswerForm: React.FC<AnswerFormProps> = ({ quizId, questionId }) => {
+const AnswerForm: React.FC<AnswerFormProps> = ({
+	quizId,
+	questionId,
+	queryQuestion,
+}) => {
 	return (
 		<section className='w-100 mb4'>
 			<Formik
@@ -22,6 +27,7 @@ const AnswerForm: React.FC<AnswerFormProps> = ({ quizId, questionId }) => {
 				onSubmit={async (values, { setSubmitting, resetForm }) => {
 					await answerQuestion(quizId, questionId, values.answer);
 
+					queryQuestion();
 					setSubmitting(false);
 					resetForm({ values: { answer: '' } });
 				}}

@@ -5,11 +5,13 @@ import { checkAnswer } from '../firebase/db/questionDb';
 interface CheckAnswerFormProps {
 	quizId: string;
 	questionId: string;
+	queryQuestion: () => void;
 }
 
 const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 	quizId,
 	questionId,
+	queryQuestion,
 }) => {
 	return (
 		<section className='w-100 mb4'>
@@ -27,6 +29,7 @@ const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 						values.commentsOnAnswer
 					);
 
+					queryQuestion();
 					setSubmitting(false);
 					resetForm({ values: { isCorrectAnswer: '', commentsOnAnswer: '' } });
 				}}

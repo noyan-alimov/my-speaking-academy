@@ -1,5 +1,5 @@
 import React from 'react';
-import { match } from 'react-router-dom';
+import { Link, match } from 'react-router-dom';
 import CreateQuestionForm from '../components/CreateQuestionForm';
 import Question from '../components/Question';
 import { getQuestions } from '../firebase/db/questionDb';
@@ -40,10 +40,14 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 						question={question}
 						quizId={quizId}
 						quizName={quizName}
+						queryQuestions={queryQuestions}
 					/>
 				))}
 			</section>
-			<CreateQuestionForm quizId={quizId} />
+			<CreateQuestionForm quizId={quizId} queryQuestions={queryQuestions} />
+			<Link to={`/quiz/${quizId}/${quizName}/assign-to-students`}>
+				<button>ASSIGN TO STUDENTS</button>
+			</Link>
 		</main>
 	);
 };
