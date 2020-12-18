@@ -1,4 +1,4 @@
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import React from 'react';
 import { checkAnswer } from '../firebase/db/questionDb';
 
@@ -8,6 +8,21 @@ interface CheckAnswerFormProps {
 	queryQuestion: () => void;
 }
 
+const returnIsCorrectAnswer = (
+	correctAnswer: boolean,
+	inCorrectAnswer: boolean
+): boolean | string => {
+	if (correctAnswer) {
+		return true;
+	}
+
+	if (inCorrectAnswer) {
+		return true;
+	}
+
+	return 'Please choose input correctly';
+};
+
 const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 	quizId,
 	questionId,
@@ -16,12 +31,30 @@ const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 	return (
 		<section className='w-100 mb4'>
 			<Formik
-				initialValues={{ isCorrectAnswer: '', commentsOnAnswer: '' }}
+				initialValues={{
+					correctAnswer: false,
+					inCorrectAnswer: false,
+					commentsOnAnswer: '',
+				}}
 				validate={values => {
 					// const errors: any = {};
 				}}
 				onSubmit={async (values, { setSubmitting, resetForm }) => {
-					const isCorrectAnswer = !values.isCorrectAnswer ? false : true;
+					if (values.correctAnswer === values.inCorrectAnswer) {
+						alert('Please choose the answer is correct or not');
+						return;
+					}
+
+					const isCorrectAnswer = returnIsCorrectAnswer(
+						values.correctAnswer,
+						values.inCorrectAnswer
+					);
+
+					if (typeof isCorrectAnswer === 'string') {
+						alert(isCorrectAnswer);
+						return;
+					}
+
 					await checkAnswer(
 						quizId,
 						questionId,
@@ -31,7 +64,13 @@ const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 
 					queryQuestion();
 					setSubmitting(false);
-					resetForm({ values: { isCorrectAnswer: '', commentsOnAnswer: '' } });
+					resetForm({
+						values: {
+							correctAnswer: false,
+							inCorrectAnswer: false,
+							commentsOnAnswer: '',
+						},
+					});
 				}}
 			>
 				{({
@@ -45,20 +84,22 @@ const CheckAnswerForm: React.FC<CheckAnswerFormProps> = ({
 				}) => (
 					<form onSubmit={handleSubmit} className='w-100 flex flex-wrap'>
 						<div className='w-100 flex flex-wrap justify-center mv5'>
-							<div className='w-100 flex flex-wrap justify-center items-center mb2 pa3'>
-								<input
-									className='db w-10 h2'
-									type='checkbox'
-									name='isCorrectAnswer'
-									value={values.isCorrectAnswer}
-									onChange={handleChange}
-									onBlur={handleBlur}
-								/>
-								<label
-									className='db w-30 f4 dark-blue'
-									htmlFor='isCorrectAnswer'
-								>
-									Correct
+							<div className='w-100 flex justify-center'>
+								<label className='db w-30 flex justify-center items-center'>
+									<Field
+										type='checkbox'
+										name='correctAnswer'
+										className='db h2 w2'
+									/>
+									<p className='db dark-blue ml3 f3'>CORRECT</p>
+								</label>
+								<label className='db w-30 flex justify-center items-center'>
+									<Field
+										type='checkbox'
+										name='inCorrectAnswer'
+										className='db h2 w2'
+									/>
+									<p className='db dark-blue ml3 f3'>INCORRECT</p>
 								</label>
 							</div>
 							<textarea

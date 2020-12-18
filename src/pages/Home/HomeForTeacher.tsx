@@ -29,7 +29,7 @@ const HomeForTeacher: React.FC<HomeForTeacherProps> = ({
 	}, [user]);
 
 	return (
-		<section className='flex flex-wrap'>
+		<section className='w-100 flex flex-wrap'>
 			<h1 className='db w-100 tc'>Quizzes</h1>
 			<Formik
 				initialValues={{ quizName: '' }}

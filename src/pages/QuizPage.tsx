@@ -31,7 +31,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 	}, [user]);
 
 	return (
-		<main className='flex flex-wrap'>
+		<main className='flex flex-wrap pb3'>
 			<h2 className='db w-100 tc dark-blue'>{quizName}</h2>
 			<section className='w-100 flex flex-wrap'>
 				{questions.map(question => (
@@ -45,14 +45,16 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 				))}
 			</section>
 			<CreateQuestionForm quizId={quizId} queryQuestions={queryQuestions} />
-			<Link
-				to={`/quiz/${quizId}/${quizName}/assign-to-students`}
-				className='w-100'
-			>
-				<button className='bn pa3 f3 dim b bg-dark-blue near-white br2 pointer'>
-					ASSIGN TO STUDENTS
-				</button>
-			</Link>
+			<div className='w-100 flex justify-center items-center'>
+				<Link
+					to={`/quiz/${quizId}/${quizName}/assign-to-students`}
+					// className='w-50'
+				>
+					<button className='bn pa3 f3 dim b bg-dark-blue near-white br2 pointer'>
+						ASSIGN TO STUDENTS
+					</button>
+				</Link>
+			</div>
 		</main>
 	);
 };
