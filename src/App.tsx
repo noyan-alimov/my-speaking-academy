@@ -8,6 +8,8 @@ import QuizPage from './pages/QuizPage';
 import { auth } from './firebase/initialize';
 import QuestionPage from './pages/QuestionPage';
 import AssignQuizToStudents from './pages/AssignQuizToStudents';
+import { getUserRole } from './firebase/db/userDb';
+import { UserRole } from './types/UserRole';
 
 const App = () => {
 	const [user, setUser] = React.useState<any>(null);
@@ -22,6 +24,24 @@ const App = () => {
 		});
 	}, []);
 
+	const [userRole, setUserRole] = React.useState<UserRole>('student');
+
+	const queryUserRole = async () => {
+		if (user && user.email) {
+			const role = await getUserRole(user.email);
+			console.log(role);
+			if (role) {
+				setUserRole(role);
+			}
+		}
+	};
+
+	React.useEffect(() => {
+		if (user) {
+			queryUserRole();
+		}
+	}, [user]);
+
 	return (
 		<>
 			<BrowserRouter>
@@ -29,18 +49,22 @@ const App = () => {
 				<Route
 					exact
 					path='/'
-					render={props => <Home user={user} {...props} />}
+					render={props => <Home user={user} userRole={userRole} {...props} />}
 				/>
 				<Route exact path='/login' component={Login} />
 				<Route
 					exact
 					path='/quiz/:id/:name'
-					render={props => <QuizPage user={user} {...props} />}
+					render={props => (
+						<QuizPage user={user} userRole={userRole} {...props} />
+					)}
 				/>
 				<Route
 					exact
 					path='/quiz/:id/:name/question/:questionId'
-					render={props => <QuestionPage user={user} {...props} />}
+					render={props => (
+						<QuestionPage user={user} userRole={userRole} {...props} />
+					)}
 				/>
 				<Route
 					exact

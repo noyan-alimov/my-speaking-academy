@@ -99,6 +99,7 @@ const HomeForTeacher: React.FC<HomeForTeacherProps> = ({
 							name={quiz.name}
 							creatorEmail={quiz.creatorEmail}
 							queryQuizzes={queryQuizzes}
+							isUserTeacher
 						/>
 					))}
 			</div>

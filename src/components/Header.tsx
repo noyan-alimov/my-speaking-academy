@@ -15,17 +15,19 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 	return (
 		<header className='h3 pt3 bg-dark-blue'>
 			<nav className='flex justify-around'>
-				<Link to='/' className='white no-underline f3'>
-					Home
-				</Link>
 				{!user ? (
 					<Link to='/login' className='white no-underline f3'>
 						Login
 					</Link>
 				) : (
-					<a href='#' className='white no-underline f3' onClick={logout}>
-						Logout
-					</a>
+					<>
+						<Link to='/' className='white no-underline f3'>
+							Home
+						</Link>
+						<a href='#' className='white no-underline f3' onClick={logout}>
+							Logout
+						</a>
+					</>
 				)}
 			</nav>
 		</header>

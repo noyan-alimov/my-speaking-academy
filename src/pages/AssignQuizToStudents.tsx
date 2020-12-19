@@ -1,8 +1,9 @@
 import React from 'react';
-import { match } from 'react-router-dom';
+import { match, Redirect } from 'react-router-dom';
 import ChooseStudentToAssign from '../components/ChooseStudentToAssign';
 import GetStudentForm from '../components/GetStudentForm';
 import firebase from '../firebase/initialize';
+import { renderPageIfLoggedIn } from '../utils/renderPageIfLoggedIn';
 
 interface AssignQuizToStudentsProps {
 	user: firebase.User;
@@ -18,7 +19,7 @@ const AssignQuizToStudents: React.FC<AssignQuizToStudentsProps> = ({
 
 	const [queriedStudent, setQueriedStudent] = React.useState<string>(''); // student email
 
-	return (
+	return renderPageIfLoggedIn(
 		<main className='flex flex-wrap mb3'>
 			<h1 className='db w-100 tc dark-blue'>{quizName}</h1>
 			<GetStudentForm setQueriedStudent={setQueriedStudent} />
@@ -28,7 +29,8 @@ const AssignQuizToStudents: React.FC<AssignQuizToStudentsProps> = ({
 					queriedStudent={queriedStudent}
 				/>
 			)}
-		</main>
+		</main>,
+		user
 	);
 };
 

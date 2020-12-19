@@ -18,6 +18,7 @@ export const getUserRole = async (email: string): Promise<UserRole | void> => {
 		const userRef = await db.collection('users').doc(email).get();
 		const userDoc = userRef.data();
 
+		console.log(userDoc);
 		if (userDoc!.role === 'teacher') {
 			return 'teacher';
 		}

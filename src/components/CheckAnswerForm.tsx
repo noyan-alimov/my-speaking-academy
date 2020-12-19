@@ -17,7 +17,7 @@ const returnIsCorrectAnswer = (
 	}
 
 	if (inCorrectAnswer) {
-		return true;
+		return false;
 	}
 
 	return 'Please choose input correctly';

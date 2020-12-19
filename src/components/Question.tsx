@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { deleteQuestion } from '../firebase/db/questionDb';
+import { UserRole } from '../types/UserRole';
 
 type QuestionType = {
 	id: string;
@@ -12,6 +13,7 @@ interface QuestionProps {
 	quizId: string;
 	quizName: string;
 	queryQuestions: () => void;
+	userRole: UserRole;
 }
 
 const Question: React.FC<QuestionProps> = ({
@@ -19,6 +21,7 @@ const Question: React.FC<QuestionProps> = ({
 	quizId,
 	quizName,
 	queryQuestions,
+	userRole,
 }) => {
 	const removeQuestion = async () => {
 		await deleteQuestion(quizId, question.id);
@@ -32,15 +35,19 @@ const Question: React.FC<QuestionProps> = ({
 				<div className='flex justify-between'>
 					<Link to={`/quiz/${quizId}/${quizName}/question/${question.id}`}>
 						<button className='bn br2 pa2 bg-dark-blue near-white dim pointer'>
-							ANSWER
+							{userRole === 'teacher' ? 'EDIT' : 'ANSWER'}
 						</button>
 					</Link>
-					<button
-						className='bn br2 pa2 bg-red near-white dim pointer'
-						onClick={removeQuestion}
-					>
-						DELETE
-					</button>
+					{userRole === 'teacher' ? (
+						<button
+							className='bn br2 pa2 bg-red near-white dim pointer'
+							onClick={removeQuestion}
+						>
+							DELETE
+						</button>
+					) : (
+						<div></div>
+					)}
 				</div>
 			</div>
 		</div>

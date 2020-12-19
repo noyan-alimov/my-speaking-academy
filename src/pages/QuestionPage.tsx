@@ -1,16 +1,23 @@
 import React from 'react';
-import { match } from 'react-router-dom';
+import { match, Redirect } from 'react-router-dom';
 import AnswerForm from '../components/AnswerForm';
 import firebase from '../firebase/initialize';
 import { getQuestion } from '../firebase/db/questionDb';
 import CheckAnswerForm from '../components/CheckAnswerForm';
+import { UserRole } from '../types/UserRole';
+import { renderPageIfLoggedIn } from '../utils/renderPageIfLoggedIn';
 
 interface QuestionPageProps {
 	user: firebase.User;
 	match: match<any>;
+	userRole: UserRole;
 }
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ user, match }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({
+	user,
+	match,
+	userRole,
+}) => {
 	const quizId = match.params.id;
 	const questionId = match.params.questionId;
 
@@ -29,7 +36,35 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ user, match }) => {
 		}
 	}, [user]);
 
-	return (
+	const renderCheckAnswerFormOrNot = () => {
+		if (userRole === 'teacher') {
+			return (
+				<CheckAnswerForm
+					quizId={quizId}
+					questionId={questionId}
+					queryQuestion={queryQuestion}
+				/>
+			);
+		}
+
+		return <div></div>;
+	};
+
+	const renderAnswerFormOrNot = () => {
+		if (userRole === 'student') {
+			return (
+				<AnswerForm
+					quizId={quizId}
+					questionId={questionId}
+					queryQuestion={queryQuestion}
+				/>
+			);
+		}
+
+		return <div></div>;
+	};
+
+	return renderPageIfLoggedIn(
 		<main className='flex flex-wrap'>
 			{question && (
 				<div className='w-100 dark-blue pa5'>
@@ -51,21 +86,14 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ user, match }) => {
 							<p className='f3 dark-blue'>{question.commentsOnAnswer}</p>
 						</div>
 					) : (
-						<CheckAnswerForm
-							quizId={quizId}
-							questionId={questionId}
-							queryQuestion={queryQuestion}
-						/>
+						renderCheckAnswerFormOrNot()
 					)}
 				</>
 			) : (
-				<AnswerForm
-					quizId={quizId}
-					questionId={questionId}
-					queryQuestion={queryQuestion}
-				/>
+				renderAnswerFormOrNot()
 			)}
-		</main>
+		</main>,
+		user
 	);
 };
 

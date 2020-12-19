@@ -4,14 +4,17 @@ import CreateQuestionForm from '../components/CreateQuestionForm';
 import Question from '../components/Question';
 import { getQuestions } from '../firebase/db/questionDb';
 import firebase from '../firebase/initialize';
+import { UserRole } from '../types/UserRole';
+import { renderPageIfLoggedIn } from '../utils/renderPageIfLoggedIn';
 
 interface QuizPageProps {
 	match: match<any>;
 	history: any;
 	user: firebase.User;
+	userRole: UserRole;
 }
 
-const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
+const QuizPage: React.FC<QuizPageProps> = ({ match, user, userRole }) => {
 	const [questions, setQuestions] = React.useState<any[]>([]);
 
 	const quizId = match.params.id;
@@ -30,7 +33,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 		}
 	}, [user]);
 
-	return (
+	return renderPageIfLoggedIn(
 		<main className='flex flex-wrap pb3'>
 			<h2 className='db w-100 tc dark-blue'>{quizName}</h2>
 			<section className='w-100 flex flex-wrap'>
@@ -41,21 +44,24 @@ const QuizPage: React.FC<QuizPageProps> = ({ match, user }) => {
 						quizId={quizId}
 						quizName={quizName}
 						queryQuestions={queryQuestions}
+						userRole={userRole}
 					/>
 				))}
 			</section>
-			<CreateQuestionForm quizId={quizId} queryQuestions={queryQuestions} />
-			<div className='w-100 flex justify-center items-center'>
-				<Link
-					to={`/quiz/${quizId}/${quizName}/assign-to-students`}
-					// className='w-50'
-				>
-					<button className='bn pa3 f3 dim b bg-dark-blue near-white br2 pointer'>
-						ASSIGN TO STUDENTS
-					</button>
-				</Link>
-			</div>
-		</main>
+			{userRole === 'teacher' && (
+				<>
+					<CreateQuestionForm quizId={quizId} queryQuestions={queryQuestions} />
+					<div className='w-100 flex justify-center items-center'>
+						<Link to={`/quiz/${quizId}/${quizName}/assign-to-students`}>
+							<button className='bn pa3 f3 dim b bg-dark-blue near-white br2 pointer'>
+								ASSIGN TO STUDENTS
+							</button>
+						</Link>
+					</div>
+				</>
+			)}
+		</main>,
+		user
 	);
 };
 

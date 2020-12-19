@@ -7,6 +7,7 @@ interface QuizProps {
 	name: string;
 	creatorEmail?: string;
 	queryQuizzes?: (creatorEmail: string) => void;
+	isUserTeacher?: boolean;
 }
 
 const Quiz: React.FC<QuizProps> = ({
@@ -14,6 +15,7 @@ const Quiz: React.FC<QuizProps> = ({
 	name,
 	creatorEmail,
 	queryQuizzes,
+	isUserTeacher,
 }) => {
 	const removeQuiz = async () => {
 		await deleteQuiz(id);
@@ -32,12 +34,16 @@ const Quiz: React.FC<QuizProps> = ({
 							EDIT
 						</button>
 					</Link>
-					<button
-						className='bn br2 pa2 bg-red near-white dim pointer'
-						onClick={removeQuiz}
-					>
-						DELETE
-					</button>
+					{isUserTeacher ? (
+						<button
+							className='bn br2 pa2 bg-red near-white dim pointer'
+							onClick={removeQuiz}
+						>
+							DELETE
+						</button>
+					) : (
+						<div></div>
+					)}
 				</div>
 			</div>
 		</div>
